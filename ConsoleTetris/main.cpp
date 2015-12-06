@@ -3,7 +3,7 @@
 #include<time.h>
 #include<conio.h>
 
-#define FEALD_HEIGHT (21)
+#define FEALD_HEIGHT (24)
 #define FEALD_WIDTH (12)
 
 //表示用
@@ -341,6 +341,23 @@ void createBlock(){
 
 }
 
+//ブロックの消去
+void clearLine(){
+	if (feald[19][0] == 1 && feald[19][1] == 1 && feald[19][2] == 1 && feald[19][3] == 1 && feald[19][4] == 1 && feald[19][5] == 1 && feald[19][6] == 1 &&
+		feald[19][7] == 1 && feald[19][8] == 1 && feald[19][9] == 1 && feald[19][10] == 1 && feald[19][11] == 1){
+		printf("aaa");
+	}
+
+
+	/*for (int i = 0; i < FEALD_HEIGHT; i++){
+		for (int t = 0; t < FEALD_WIDTH; t++){
+		if (feald[i][t]){
+		printf("aaa");
+		}
+		}
+		}*/
+}
+
 //フィールドの再描画
 void draw(char _bloak[][4][4]){
 	system("cls");
@@ -369,7 +386,8 @@ void draw(char _bloak[][4][4]){
 	}
 
 	//描画
-	for (int i = 0; i < FEALD_HEIGHT; i++){
+	/*ブロックの初期座標を画面外にするためにiは3からスタートしている*/
+	for (int i = 3; i < FEALD_HEIGHT; i++){
 		for (int t = 0; t < FEALD_WIDTH; t++){
 			if (buf[i][t] == 0){
 				printf("□");
@@ -380,9 +398,6 @@ void draw(char _bloak[][4][4]){
 		}
 		printf("\n");
 	}
-
-	/*printf("\n");
-	printf("%d\n", rotate);*/
 }
 
 //当たり判定
@@ -433,8 +448,8 @@ void main(){
 	for (int i = 0; i < FEALD_HEIGHT; i++){
 		for (int t = 0; t < FEALD_WIDTH; t++){
 			feald[i][0] = 1;
-			feald[i][11] = 1;
-			feald[20][t] = 1;
+			feald[i][FEALD_WIDTH - 1] = 1;
+			feald[FEALD_HEIGHT - 1][t] = 1;
 		}
 	}
 
@@ -456,6 +471,7 @@ void main(){
 		if (past != now){
 			if (isHit(currentBlock, posX, posY + 1, rotate)){
 				lockBlock(currentBlock, posX, posY, rotate);
+				clearLine();
 			}
 			else{
 				posY++;
@@ -485,6 +501,7 @@ void main(){
 					if (isHit(currentBlock, posX, posY + 1, rotate)){
 						//下に行けない
 						lockBlock(currentBlock, posX, posY, rotate);
+						clearLine();
 					}
 					else{
 						posY++;
