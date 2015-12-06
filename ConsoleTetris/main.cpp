@@ -95,28 +95,28 @@ char type_I[RotateMax][4][4] = {
 char type_invT[RotateMax][4][4] = {
 	{
 		{ 0, 0, 0, 0 },
-		{ 0, 1, 0, 0 },
-		{ 1, 1, 1, 0 },
+		{ 0, 0, 1, 0 },
+		{ 0, 1, 1, 1 },
 		{ 0, 0, 0, 0 }
 	},
 
 	{
 		{ 0, 0, 0, 0 },
-		{ 0, 1, 0, 0 },
+		{ 0, 0, 1, 0 },
+		{ 0, 0, 1, 1 },
+		{ 0, 0, 1, 0 }
+	},
+	{
+		{ 0, 0, 0, 0 },
+		{ 0, 0, 0, 0 },
+		{ 0, 1, 1, 1 },
+		{ 0, 0, 1, 0 }
+	},
+	{
+		{ 0, 0, 0, 0 },
+		{ 0, 0, 1, 0 },
 		{ 0, 1, 1, 0 },
-		{ 0, 1, 0, 0 }
-	},
-	{
-		{ 0, 0, 0, 0 },
-		{ 0, 0, 0, 0 },
-		{ 1, 1, 1, 0 },
-		{ 0, 1, 0, 0 }
-	},
-	{
-		{ 0, 0, 0, 0 },
-		{ 0, 1, 0, 0 },
-		{ 1, 1, 0, 0 },
-		{ 0, 1, 0, 0 }
+		{ 0, 0, 1, 0 }
 	}
 
 };
@@ -252,6 +252,7 @@ int rotate;
 //ブロック生成
 void createBlock(){
 	//ランダムでブロックの種類を決定
+
 	blockType = rand() % 7;
 	posX = 4;
 	posY = 0;
@@ -380,8 +381,8 @@ void draw(char _bloak[][4][4]){
 		printf("\n");
 	}
 
-	printf("\n");
-	printf("%d\n", posY);
+	/*printf("\n");
+	printf("%d\n", rotate);*/
 }
 
 //当たり判定
@@ -396,6 +397,7 @@ bool isHit(char _bloak[][4][4], int _x, int _y, int _rotate){
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -461,24 +463,20 @@ void main(){
 			draw(currentBlock);
 		}
 
-
-
-		//printf("%d\n", timer);
-
 		//操作
 		//キー入力
 		if (_kbhit() != 0){
 			unsigned char c = _getch();
 			switch (c){
 			case 'a':
-				if (isHit(currentBlock, posX, posY, rotate + 1)){
+				if (isHit(currentBlock, posX, posY, ((rotate + 1) % RotateMax))){
 
 				}
 				else{
 					rotate++;
+					rotate = rotate%RotateMax;
 				}
 
-				rotate = rotate%RotateMax;
 				break;
 
 			case 0xe0:
