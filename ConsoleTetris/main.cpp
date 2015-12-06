@@ -21,8 +21,18 @@ enum{
 	RotateMax
 };
 
+enum{
+	TYPE_O = 0,
+	TYPE_I,
+	TYPE_invT,
+	TYPE_L,
+	TYPE_invL,
+	TYPE_Z,
+	TYPE_invZ
+};
+
 //o型
-char o[RotateMax][4][4] = {
+char type_O[RotateMax][4][4] = {
 	{
 		{ 0, 0, 0, 0 },
 		{ 0, 1, 1, 0 },
@@ -52,7 +62,7 @@ char o[RotateMax][4][4] = {
 };
 
 //I型
-char I[RotateMax][4][4] = {
+char type_I[RotateMax][4][4] = {
 	{
 		{ 0, 0, 0, 0 },
 		{ 1, 1, 1, 1 },
@@ -61,10 +71,10 @@ char I[RotateMax][4][4] = {
 	},
 
 	{
-		{ 0, 0, 1, 0 },
-		{ 0, 0, 1, 0 },
-		{ 0, 0, 1, 0 },
-		{ 0, 0, 1, 0 }
+		{ 0, 1, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 1, 0, 0 }
 	},
 	{
 		{ 0, 0, 0, 0 },
@@ -73,16 +83,16 @@ char I[RotateMax][4][4] = {
 		{ 0, 0, 0, 0 }
 	},
 	{
-		{ 0, 0, 1, 0 },
-		{ 0, 0, 1, 0 },
-		{ 0, 0, 1, 0 },
-		{ 0, 0, 1, 0 }
+		{ 0, 1, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 1, 0, 0 }
 	}
 
 };
 
 //凸型
-char invT[RotateMax][4][4] = {
+char type_invT[RotateMax][4][4] = {
 	{
 		{ 0, 0, 0, 0 },
 		{ 0, 1, 0, 0 },
@@ -112,7 +122,7 @@ char invT[RotateMax][4][4] = {
 };
 
 //L型
-char L[RotateMax][4][4] = {
+char type_L[RotateMax][4][4] = {
 	{
 		{ 0, 1, 0, 0 },
 		{ 0, 1, 0, 0 },
@@ -142,7 +152,7 @@ char L[RotateMax][4][4] = {
 };
 
 //逆L型
-char invL[RotateMax][4][4] = {
+char type_invL[RotateMax][4][4] = {
 	{
 		{ 0, 0, 1, 0 },
 		{ 0, 0, 1, 0 },
@@ -172,7 +182,7 @@ char invL[RotateMax][4][4] = {
 };
 
 //Z型
-char z[RotateMax][4][4] = {
+char type_Z[RotateMax][4][4] = {
 	{
 		{ 0, 0, 0, 0 },
 		{ 0, 1, 1, 0 },
@@ -202,7 +212,7 @@ char z[RotateMax][4][4] = {
 };
 
 //逆Z型
-char invZ[RotateMax][4][4] = {
+char type_invZ[RotateMax][4][4] = {
 	{
 		{ 0, 0, 0, 0 },
 		{ 0, 0, 1, 1 },
@@ -231,15 +241,115 @@ char invZ[RotateMax][4][4] = {
 
 };
 
+//ブロックのx,yと回転
+//curentBlockは現在落下してるBlock
+char currentBlock[RotateMax][4][4];
+int blockType;
+int posX;
+int posY;
+int rotate;
 
-//ブロックのx,y
-int posX = 4;
-int posY = 0;
-int rotate = 0;
+//ブロック生成
+void createBlock(){
+	//ランダムでブロックの種類を決定
+	blockType = rand() % 7;
+	posX = 4;
+	posY = 0;
+	rotate = 0;
+
+	//現在のブロック初期化
+	for (int i = 0; i < 4; i++){
+		for (int t = 0; t < 4; t++){
+			for (int u = 0; u < RotateMax; u++){
+				currentBlock[u][i][t] = 0;
+			}
+		}
+	}
+
+	switch (blockType){
+	case TYPE_O:
+		for (int i = 0; i < 4; i++){
+			for (int t = 0; t < 4; t++){
+				for (int u = 0; u < RotateMax; u++){
+					currentBlock[u][i][t] = currentBlock[u][i][t] | type_O[u][i][t];
+				}
+			}
+		}
+		break;
+
+	case TYPE_I:
+		for (int i = 0; i < 4; i++){
+			for (int t = 0; t < 4; t++){
+				for (int u = 0; u < RotateMax; u++){
+					currentBlock[u][i][t] = currentBlock[u][i][t] | type_I[u][i][t];
+				}
+			}
+		}
+		break;
+
+	case TYPE_invT:
+		for (int i = 0; i < 4; i++){
+			for (int t = 0; t < 4; t++){
+				for (int u = 0; u < RotateMax; u++){
+					currentBlock[u][i][t] = currentBlock[u][i][t] | type_invT[u][i][t];
+				}
+			}
+		}
+		break;
+
+	case TYPE_L:
+		for (int i = 0; i < 4; i++){
+			for (int t = 0; t < 4; t++){
+				for (int u = 0; u < RotateMax; u++){
+					currentBlock[u][i][t] = currentBlock[u][i][t] | type_L[u][i][t];
+				}
+			}
+		}
+		break;
+
+	case TYPE_invL:
+		for (int i = 0; i < 4; i++){
+			for (int t = 0; t < 4; t++){
+				for (int u = 0; u < RotateMax; u++){
+					currentBlock[u][i][t] = currentBlock[u][i][t] | type_invL[u][i][t];
+				}
+			}
+		}
+		break;
+
+	case TYPE_Z:
+		for (int i = 0; i < 4; i++){
+			for (int t = 0; t < 4; t++){
+				for (int u = 0; u < RotateMax; u++){
+					currentBlock[u][i][t] = currentBlock[u][i][t] | type_Z[u][i][t];
+				}
+			}
+		}
+		break;
+
+	case TYPE_invZ:
+		for (int i = 0; i < 4; i++){
+			for (int t = 0; t < 4; t++){
+				for (int u = 0; u < RotateMax; u++){
+					currentBlock[u][i][t] = currentBlock[u][i][t] | type_invZ[u][i][t];
+				}
+			}
+		}
+		break;
+	}
+
+}
 
 //フィールドの再描画
-void draw(){
+void draw(char _bloak[][4][4]){
 	system("cls");
+
+	//表示用バッファ初期化
+	for (int i = 0; i < FEALD_HEIGHT; i++){
+		for (int t = 0; t < FEALD_WIDTH; t++){
+			buf[i][t] = 0;
+		}
+	}
 
 	//描画用buf更新
 	//フィールド情報
@@ -253,7 +363,7 @@ void draw(){
 	//ブロック
 	for (int i = 0; i < 4; i++){
 		for (int t = 0; t < 4; t++){
-			buf[i + posY][t + posX] += invT[rotate][i][t];
+			buf[i + posY][t + posX] = (buf[i + posY][t + posX]) | (_bloak[rotate][i][t]);
 		}
 	}
 
@@ -269,12 +379,16 @@ void draw(){
 		}
 		printf("\n");
 	}
+
+	printf("\n");
+	printf("%d\n", posY);
 }
 
-bool isHit(int _x, int _y, int _rotate){
+//当たり判定
+bool isHit(char _bloak[][4][4], int _x, int _y, int _rotate){
 	for (int i = 0; i < 4; i++){
 		for (int t = 0; t < 4; t++){
-			if (invT[_rotate][i][t] && feald[_y + i][_x + t]){
+			if (_bloak[_rotate][i][t] && feald[_y + i][_x + t]){
 				return true;
 			}
 			else{
@@ -285,6 +399,17 @@ bool isHit(int _x, int _y, int _rotate){
 	return false;
 }
 
+//ブロック固定
+void lockBlock(char _bloak[][4][4], int _x, int _y, int _rotate){
+	for (int i = 0; i < 4; i++){
+		for (int t = 0; t < 4; t++){
+			feald[_y + i][_x + t] = (feald[_y + i][_x + t]) | (_bloak[_rotate][i][t]);
+		}
+	}
+
+	//新しいブロックを生成
+	createBlock();
+}
 
 void main(){
 
@@ -311,8 +436,11 @@ void main(){
 		}
 	}
 
+	//最初の1個目ブロック生成
+	createBlock();
+
 	//最初の描画
-	draw();
+	draw(currentBlock);
 
 	/////
 
@@ -321,15 +449,20 @@ void main(){
 		//経過時間
 		past = now;
 		now = time(NULL);
-		if (past != now){
-			if (isHit(posX, posY + 1, rotate)){
 
+		//自由落下処理
+		if (past != now){
+			if (isHit(currentBlock, posX, posY + 1, rotate)){
+				lockBlock(currentBlock, posX, posY, rotate);
 			}
 			else{
 				posY++;
 			}
-			draw();
+			draw(currentBlock);
 		}
+
+
+
 		//printf("%d\n", timer);
 
 		//操作
@@ -338,7 +471,7 @@ void main(){
 			unsigned char c = _getch();
 			switch (c){
 			case 'a':
-				if (isHit(posX, posY, rotate + 1)){
+				if (isHit(currentBlock, posX, posY, rotate + 1)){
 
 				}
 				else{
@@ -351,8 +484,9 @@ void main(){
 			case 0xe0:
 				switch (_getch()){
 				case 0x50:
-					if (isHit(posX, posY + 1, rotate)){
-
+					if (isHit(currentBlock, posX, posY + 1, rotate)){
+						//下に行けない
+						lockBlock(currentBlock, posX, posY, rotate);
 					}
 					else{
 						posY++;
@@ -360,7 +494,7 @@ void main(){
 					break;
 
 				case 0x4b:
-					if (isHit(posX - 1, posY, rotate)){
+					if (isHit(currentBlock, posX - 1, posY, rotate)){
 
 					}
 					else{
@@ -369,7 +503,7 @@ void main(){
 					break;
 
 				case 0x4d:
-					if (isHit(posX + 1, posY, rotate)){
+					if (isHit(currentBlock, posX + 1, posY, rotate)){
 
 					}
 					else{
@@ -382,7 +516,7 @@ void main(){
 				break;
 
 			}
-			draw();
+			draw(currentBlock);
 		}
 	}
 }
