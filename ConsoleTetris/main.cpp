@@ -3,8 +3,10 @@
 #include<time.h>
 #include<conio.h>
 
-#define FEALD_HEIGHT (24)
+#define FEALD_HEIGHT (23)
 #define FEALD_WIDTH (12)
+
+
 
 //表示用
 char buf[FEALD_HEIGHT][FEALD_WIDTH];
@@ -253,7 +255,8 @@ int rotate;
 void createBlock(){
 	//ランダムでブロックの種類を決定
 
-	blockType = rand() % 7;
+	//blockType = rand() % 7;
+	blockType = TYPE_I;
 	posX = 4;
 	posY = 0;
 	rotate = 0;
@@ -343,19 +346,14 @@ void createBlock(){
 
 //ブロックの消去
 void clearLine(){
-	if (feald[19][0] == 1 && feald[19][1] == 1 && feald[19][2] == 1 && feald[19][3] == 1 && feald[19][4] == 1 && feald[19][5] == 1 && feald[19][6] == 1 &&
-		feald[19][7] == 1 && feald[19][8] == 1 && feald[19][9] == 1 && feald[19][10] == 1 && feald[19][11] == 1){
-		printf("aaa");
+	for (int i = 21; i > 3; i--){
+		if (feald[i][1] == 1 && feald[i][2] == 1 && feald[i][3] == 1 && feald[i][4] == 1 && feald[i][5] == 1 && feald[i][6] == 1 &&
+			feald[i][7] == 1 && feald[i][8] == 1 && feald[i][9] == 1 && feald[i][10] == 1){
+			for (int t = 1; t < FEALD_WIDTH - 1; t++){
+				feald[i][t] = 0;
+			}
+		}
 	}
-
-
-	/*for (int i = 0; i < FEALD_HEIGHT; i++){
-		for (int t = 0; t < FEALD_WIDTH; t++){
-		if (feald[i][t]){
-		printf("aaa");
-		}
-		}
-		}*/
 }
 
 //フィールドの再描画
@@ -386,8 +384,8 @@ void draw(char _bloak[][4][4]){
 	}
 
 	//描画
-	/*ブロックの初期座標を画面外にするためにiは3からスタートしている*/
-	for (int i = 3; i < FEALD_HEIGHT; i++){
+	/*ブロックの初期座標を画面外にするためにiは2からスタートしている*/
+	for (int i = 2; i < FEALD_HEIGHT; i++){
 		for (int t = 0; t < FEALD_WIDTH; t++){
 			if (buf[i][t] == 0){
 				printf("□");
